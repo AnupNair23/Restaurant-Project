@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="./libraries/images/logo.png">
+
+    <title>Restaurant Finder</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+        crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="assets/demo.css">
+    <link rel="stylesheet" href="assets/header-fixed.css">
+    <link href='https://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="./libraries/js/angular.js"></script>
+    <script src="./libraries/js/angular-cookies.js"></script>
+    <script src="./libraries/lib/notification.js"></script>
+    <script src="./libraries/lib/angular-ui-notification.js"></script>
+    <script src="./angular/config.js"></script>
+
+</head>
+
+
+<style>
+    .header-fixed {
+        background-color: white;
+        padding: 20px 40px;
+        height: 95px;
+        color: #ffffff;
+        box-sizing: border-box;
+        top: -100px;
+
+        -webkit-transition: top 0.3s;
+        transition: top 0.3s;
+    }
+
+    .header-fixed .header-limiter {
+        max-width: 1200px;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    /*	The header placeholder. It is displayed when the header is fixed to the top of the
+	browser window, in order to prevent the content of the page from jumping up. */
+
+    .header-fixed-placeholder {
+        height: 80px;
+        display: none;
+    }
+
+    /* Logo */
+
+    .header-fixed .header-limiter h1 {
+        float: left;
+        font: normal 28px Cookie, Arial, Helvetica, sans-serif;
+        line-height: 40px;
+        margin: 0;
+    }
+
+    .header-fixed .header-limiter h1 span {
+        color: #5383d3;
+    }
+
+    /* The navigation links */
+
+    .header-fixed .header-limiter a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .header-fixed .header-limiter nav {
+        font: 16px Arial, Helvetica, sans-serif;
+        line-height: 58px;
+        float: right;
+    }
+
+    .header-fixed .header-limiter nav a {
+        display: inline-block;
+        padding: 0 5px;
+        text-decoration: none;
+        color: #9b8989;
+        opacity: 0.9;
+    }
+
+    .header-fixed .header-limiter nav a:hover {
+        opacity: 1;
+        color: black;
+    }
+
+    .header-fixed .header-limiter nav a.selected {
+        color: #608bd2;
+        pointer-events: none;
+        opacity: 1;
+    }
+
+    /* Fixed version of the header */
+
+    body.fixed .header-fixed {
+        padding: 10px 40px;
+        height: 60px;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+
+    body.fixed .header-fixed-placeholder {
+        display: block;
+    }
+
+    body.fixed .header-fixed .header-limiter h1 {
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    body.fixed .header-fixed .header-limiter nav {
+        line-height: 28px;
+        font-size: 13px;
+    }
+
+
+    /* Making the header responsive */
+
+    @media all and (max-width: 600px) {
+
+        .header-fixed {
+            padding: 20px 0;
+            height: 75px;
+        }
+
+        .header-fixed .header-limiter h1 {
+            float: none;
+            margin: -8px 0 10px;
+            text-align: center;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .header-fixed .header-limiter nav {
+            line-height: 1;
+            float: none;
+        }
+
+        .header-fixed .header-limiter nav a {
+            font-size: 13px;
+        }
+
+        body.fixed .header-fixed {
+            display: none;
+        }
+
+    }
+
+    /*
+	 We are clearing the body's margin and padding, so that the header fits properly.
+	 We are also adding a height to demonstrate the scrolling behavior. You can remove
+	 these styles.
+ */
+
+    body {
+        margin: 0;
+        padding: 0;
+        height: 1500px;
+    }
+</style>
+
+<body ng-app="RestaurantApp" ng-controller="RestaurantController">
+
+    <header class="header-fixed">
+
+        <div class="header-limiter">
+
+            <h1>
+                <a href="#">
+                    <img style="height: 84px;margin-top: -16%;" src="./libraries/images/logo.png">
+                </a>
+            </h1>
+
+            <nav>
+                <a href="#">Home</a>
+                <a href="#">Blog</a>
+                <a href="#">Pricing</a>
+                <a href="#">About</a>
+                <a href="#">Faq</a>
+                <a href="#">Contact</a>
+            </nav>
+
+        </div>
+
+    </header>
+
+    <!-- You need this element to prevent the content of the page from jumping up -->
+    <div class="header-fixed-placeholder"></div>
+
+    <!-- The content of your page would go here. -->
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            var showHeaderAt = 150;
+
+            var win = $(window),
+                body = $('body');
+
+            // Show the fixed header only on larger screen devices
+
+            if (win.width() > 400) {
+
+                // When we scroll more than 150px down, we set the
+                // "fixed" class on the body element.
+
+                win.on('scroll', function (e) {
+
+                    if (win.scrollTop() > showHeaderAt) {
+                        body.addClass('fixed');
+                    } else {
+                        body.removeClass('fixed');
+                    }
+                });
+
+            }
+
+        });
+    </script>
+
+    <style>
+        .landing_section {
+            background-image: url('./libraries/images/landing.jpg');
+            background-size: cover;
+            height: 700px;
+        }
+
+        #img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10%;
+        }
+
+        #para {
+            text-align: center;
+            z-index: 1;
+            position: relative;
+            font-weight: 300 !important;
+            text-rendering: optimizeLegibility;
+            font-size: 28px;
+            line-height: 1.3em;
+            padding: 0 15px 25px;
+            text-shadow: 1px 1px 0 rgba(0, 0, 0, .3);
+            color: #fff;
+        }
+
+
+        input[type=text] {
+            width: 77%;
+            margin-top: 5%;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: white;
+            background-image: url('./libraries/images/searchicon.png');
+            background-position: 10px 10px;
+            background-size: 3%;
+            background-repeat: no-repeat;
+            padding: 19px 20px 12px 56px;
+            -webkit-transition: width 0.4s ease-in-out;
+            transition: width 0.4s ease-in-out;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+
+        }
+    </style>
+
+
+    <section class="landing_section">
+
+        <div class="container">
+
+            <img id="img" src="./libraries/images/spoon.jpg">
+            <p id="para" style="margin-top: 5%;">Find the best restaurants, cafés, and bars in Bengaluru</p>
+
+            <input type="text" name="search" placeholder="Search..">
+        </div>
+
+
+    </section>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
+        @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
+
+
+        main {
+            min-width: 320px;
+            max-width: 800px;
+            padding: 50px;
+            margin: 0 auto;
+            background: #fff;
+        }
+
+        #content1,
+        #content2,
+        #content3,
+        #content4 {
+            display: none;
+            padding: 20px 0 0;
+            border-top: 1px solid #ddd;
+        }
+
+        input {
+            display: none;
+        }
+
+        label {
+            display: inline-block;
+            margin: 0 0 -1px;
+            padding: 15px 25px;
+            font-weight: 600;
+            text-align: center;
+            color: #bbb;
+            border: 1px solid transparent;
+        }
+
+        label:before {
+            font-family: fontawesome;
+            font-weight: normal;
+            margin-right: 10px;
+        }
+
+        label[for*='1']:before {
+            content: '\f1cb';
+        }
+
+        label[for*='2']:before {
+            content: '\f17d';
+        }
+
+        label[for*='3']:before {
+            content: '\f16b';
+        }
+
+        label[for*='4']:before {
+            content: '\f1a9';
+        }
+
+        label:hover {
+            color: #888;
+            cursor: pointer;
+        }
+
+        input:checked+label {
+            color: #555;
+            border: 1px solid #ddd;
+            border-top: 2px solid orange;
+            border-bottom: 1px solid #fff;
+        }
+
+        #tab1:checked~#content1,
+        #tab2:checked~#content2,
+        #tab3:checked~#content3,
+        #tab4:checked~#content4 {
+            display: block;
+        }
+
+        @media screen and (max-width: 650px) {
+            label {
+                font-size: 0;
+            }
+            label:before {
+                margin: 0;
+                font-size: 18px;
+            }
+        }
+
+        @media screen and (max-width: 400px) {
+            label {
+                padding: 15px;
+            }
+        }
+    </style>
+
+
+    <section class="tabs">
+
+        <main>
+
+            <input id="tab1" type="radio" name="tabs" checked>
+            <label for="tab1">Codepen</label>
+
+            <input id="tab2" type="radio" name="tabs">
+            <label for="tab2">Dribbble</label>
+
+            <input id="tab3" type="radio" name="tabs">
+            <label for="tab3">Dropbox</label>
+
+            <input id="tab4" type="radio" name="tabs">
+            <label for="tab4">Drupal</label>
+
+            <section id="content1">
+                <p>
+                    Bacon ipsum dolor sit amet beef venison beef ribs kielbasa. Sausage pig leberkas, t-bone sirloin shoulder bresaola. Frankfurter
+                    rump porchetta ham. Pork belly prosciutto brisket meatloaf short ribs.
+                </p>
+                <p>
+                    Brisket meatball turkey short loin boudin leberkas meatloaf chuck andouille pork loin pastrami spare ribs pancetta rump.
+                    Frankfurter corned beef beef tenderloin short loin meatloaf swine ground round venison.
+                </p>
+            </section>
+
+            <section id="content2">
+                <p>
+                    Bacon ipsum dolor sit amet landjaeger sausage brisket, jerky drumstick fatback boudin ball tip turducken. Pork belly meatball
+                    t-bone bresaola tail filet mignon kevin turkey ribeye shank flank doner cow kielbasa shankle. Pig swine
+                    chicken hamburger, tenderloin turkey rump ball tip sirloin frankfurter meatloaf boudin brisket ham hock.
+                    Hamburger venison brisket tri-tip andouille pork belly ball tip short ribs biltong meatball chuck. Pork
+                    chop ribeye tail short ribs, beef hamburger meatball kielbasa rump corned beef porchetta landjaeger flank.
+                    Doner rump frankfurter meatball meatloaf, cow kevin pork pork loin venison fatback spare ribs salami
+                    beef ribs.
+                </p>
+                <p>
+                    Jerky jowl pork chop tongue, kielbasa shank venison. Capicola shank pig ribeye leberkas filet mignon brisket beef kevin tenderloin
+                    porchetta. Capicola fatback venison shank kielbasa, drumstick ribeye landjaeger beef kevin tail meatball
+                    pastrami prosciutto pancetta. Tail kevin spare ribs ground round ham ham hock brisket shoulder. Corned
+                    beef tri-tip leberkas flank sausage ham hock filet mignon beef ribs pancetta turkey.
+                </p>
+            </section>
+
+            <section id="content3">
+                <p>
+                    Bacon ipsum dolor sit amet beef venison beef ribs kielbasa. Sausage pig leberkas, t-bone sirloin shoulder bresaola. Frankfurter
+                    rump porchetta ham. Pork belly prosciutto brisket meatloaf short ribs.
+                </p>
+                <p>
+                    Brisket meatball turkey short loin boudin leberkas meatloaf chuck andouille pork loin pastrami spare ribs pancetta rump.
+                    Frankfurter corned beef beef tenderloin short loin meatloaf swine ground round venison.
+                </p>
+            </section>
+
+            <section id="content4">
+                <p>
+                    Bacon ipsum dolor sit amet landjaeger sausage brisket, jerky drumstick fatback boudin ball tip turducken. Pork belly meatball
+                    t-bone bresaola tail filet mignon kevin turkey ribeye shank flank doner cow kielbasa shankle. Pig swine
+                    chicken hamburger, tenderloin turkey rump ball tip sirloin frankfurter meatloaf boudin brisket ham hock.
+                    Hamburger venison brisket tri-tip andouille pork belly ball tip short ribs biltong meatball chuck. Pork
+                    chop ribeye tail short ribs, beef hamburger meatball kielbasa rump corned beef porchetta landjaeger flank.
+                    Doner rump frankfurter meatball meatloaf, cow kevin pork pork loin venison fatback spare ribs salami
+                    beef ribs.
+                </p>
+                <p>
+                    Jerky jowl pork chop tongue, kielbasa shank venison. Capicola shank pig ribeye leberkas filet mignon brisket beef kevin tenderloin
+                    porchetta. Capicola fatback venison shank kielbasa, drumstick ribeye landjaeger beef kevin tail meatball
+                    pastrami prosciutto pancetta. Tail kevin spare ribs ground round ham ham hock brisket shoulder. Corned
+                    beef tri-tip leberkas flank sausage ham hock filet mignon beef ribs pancetta turkey.
+                </p>
+            </section>
+
+        </main>
+    </section>
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-sanitize.js"></script>
+    <script src="./angular/hotel_angular.js "></script>
+
+</body>
+
+</html>
